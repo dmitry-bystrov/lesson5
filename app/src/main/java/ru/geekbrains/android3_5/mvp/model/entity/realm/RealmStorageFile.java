@@ -3,10 +3,10 @@ package ru.geekbrains.android3_5.mvp.model.entity.realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class RealmBitmap extends RealmObject {
+public class RealmStorageFile extends RealmObject {
     @PrimaryKey
     private String url;
-    private byte[] byteArray;
+    private String fileName;
 
     public String getUrl() {
         return url;
@@ -16,11 +16,11 @@ public class RealmBitmap extends RealmObject {
         this.url = url;
     }
 
-    public byte[] getByteArray() {
-        return byteArray;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setByteArray(byte[] byteArray) {
-        this.byteArray = byteArray;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

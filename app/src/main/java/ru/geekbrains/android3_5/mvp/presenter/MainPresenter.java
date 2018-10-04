@@ -7,9 +7,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import io.reactivex.Scheduler;
 import ru.geekbrains.android3_5.mvp.model.entity.User;
-import ru.geekbrains.android3_5.mvp.model.repo.AAUserRepo;
-import ru.geekbrains.android3_5.mvp.model.repo.PaperUserRepo;
-import ru.geekbrains.android3_5.mvp.model.repo.RealmUserRepo;
+import ru.geekbrains.android3_5.mvp.model.repo.UserRepo;
 import ru.geekbrains.android3_5.mvp.view.MainView;
 import ru.geekbrains.android3_5.mvp.view.RepoRowView;
 import timber.log.Timber;
@@ -37,13 +35,13 @@ public class MainPresenter extends MvpPresenter<MainView>
 
     private RepoListPresenter repoListPresenter = new RepoListPresenter();
     private Scheduler scheduler;
-    private RealmUserRepo userRepo;
+    private UserRepo userRepo;
     private User user;
 
     public MainPresenter(Scheduler scheduler)
     {
         this.scheduler = scheduler;
-        userRepo = new RealmUserRepo();
+        userRepo = new UserRepo();
     }
 
     @Override

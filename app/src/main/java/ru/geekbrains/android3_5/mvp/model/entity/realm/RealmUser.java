@@ -7,8 +7,44 @@ import io.realm.annotations.PrimaryKey;
 public class RealmUser extends RealmObject
 {
     @PrimaryKey
-    public String login;
-    public String avatarUrl;
-    public String reposUrl;
-    public RealmList<RealmRepository> repos = new RealmList<>();
+    private String login;
+    private String avatarUrl;
+    private String reposUrl;
+    private RealmList<RealmRepository> repos;
+
+    public RealmUser() {
+        this.repos = new RealmList<>();
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getReposUrl() {
+        return reposUrl;
+    }
+
+    public void setReposUrl(String reposUrl) {
+        this.reposUrl = reposUrl;
+    }
+
+    public RealmList<RealmRepository> getRepos() {
+        return repos;
+    }
+
+    public void setRepos(RealmList<RealmRepository> repos) {
+        this.repos = repos;
+    }
 }

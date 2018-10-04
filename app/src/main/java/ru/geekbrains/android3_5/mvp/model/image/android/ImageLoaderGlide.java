@@ -11,8 +11,6 @@ import com.bumptech.glide.request.target.Target;
 
 import java.io.ByteArrayOutputStream;
 
-import io.paperdb.Paper;
-import ru.geekbrains.android3_5.Utils;
 import ru.geekbrains.android3_5.mvp.model.NetworkStatus;
 import ru.geekbrains.android3_5.mvp.model.image.ImageLoader;
 
@@ -20,38 +18,35 @@ import ru.geekbrains.android3_5.mvp.model.image.ImageLoader;
  * Created by stanislav on 3/12/2018.
  */
 
-public class ImageLoaderGlide implements ImageLoader<ImageView>
-{
+public class ImageLoaderGlide implements ImageLoader<ImageView> {
+    private ImageCache imageCache;
+
+    public ImageLoaderGlide() {
+        //this.imageCache = new PaperImageCache();
+        this.imageCache = new RealmImageCache();
+    }
+
     @Override
-    public void loadInto(@Nullable String url, ImageView container)
-    {
-        String sha1 = Utils.SHA1(url);
-        if (NetworkStatus.isOffline())
-        {
-            if (Paper.book("images").contains(sha1))
-            {
-                byte[] bytes = Paper.book("images").read(sha1);
+    public void loadInto(@Nullable String url, ImageView container) {
+        if (NetworkStatus.isOffline()) {
+            byte[] bytes = imageCache.getByteArray(url);
+            if (bytes != null) {
                 GlideApp.with(container.getContext())
                         .load(bytes)
                         .into(container);
             }
-        }
-        else
-        {
-            GlideApp.with(container.getContext()).asBitmap().load(url).listener(new RequestListener<Bitmap>()
-            {
+        } else {
+            GlideApp.with(container.getContext()).asBitmap().load(url).listener(new RequestListener<Bitmap>() {
                 @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource)
-                {
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                     return false;
                 }
 
                 @Override
-                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource)
-                {
+                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    resource.compress(Bitmap.CompressFormat.JPEG, 100 , stream);
-                    Paper.book("images").write(sha1, stream.toByteArray());
+                    resource.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    imageCache.saveByteArray(url, stream.toByteArray());
                     return false;
                 }
             }).into(container);

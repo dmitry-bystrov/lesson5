@@ -1,4 +1,4 @@
-package ru.geekbrains.android3_5.mvp.model.repo;
+package ru.geekbrains.android3_5.mvp.model.repo.cache;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;

@@ -25,10 +25,8 @@ import ru.geekbrains.android3_5.mvp.model.image.android.cache.ImageCache;
 public class ImageLoaderGlide implements ImageLoader<ImageView> {
     private ImageCache imageCache;
 
-    public ImageLoaderGlide() {
-        //this.imageCache = new PaperImageCache();
-        //this.imageCache = new RealmImageCache();
-        this.imageCache = new HybridImageCache();
+    public ImageLoaderGlide(ImageCache imageCache) {
+        this.imageCache = imageCache;
     }
 
     @Override

@@ -5,56 +5,52 @@ import android.annotation.SuppressLint;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import javax.inject.Inject;
+
 import io.reactivex.Scheduler;
+import ru.geekbrains.android3_5.mvp.model.api.IUserRepo;
 import ru.geekbrains.android3_5.mvp.model.entity.User;
-import ru.geekbrains.android3_5.mvp.model.repo.UserRepo;
 import ru.geekbrains.android3_5.mvp.view.MainView;
 import ru.geekbrains.android3_5.mvp.view.RepoRowView;
 import timber.log.Timber;
 
 @InjectViewState
-public class MainPresenter extends MvpPresenter<MainView>
-{
-    class RepoListPresenter implements IRepoListPresenter
-    {
+public class MainPresenter extends MvpPresenter<MainView> {
+
+    class RepoListPresenter implements IRepoListPresenter {
         @Override
-        public void bindRepoListRow(int pos, RepoRowView rowView)
-        {
-            if (user != null)
-            {
+        public void bindRepoListRow(int pos, RepoRowView rowView) {
+            if (user != null) {
                 rowView.setTitle(user.getRepos().get(pos).getName());
             }
         }
 
         @Override
-        public int getRepoCount()
-        {
+        public int getRepoCount() {
             return user == null || user.getRepos() == null ? 0 : user.getRepos().size();
         }
     }
 
     private RepoListPresenter repoListPresenter = new RepoListPresenter();
     private Scheduler scheduler;
-    private UserRepo userRepo;
     private User user;
 
-    public MainPresenter(Scheduler scheduler)
-    {
+    @Inject
+    IUserRepo userRepo;
+
+    public MainPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        userRepo = new UserRepo();
     }
 
     @Override
-    protected void onFirstViewAttach()
-    {
+    protected void onFirstViewAttach() {
         super.onFirstViewAttach();
         getViewState().init();
         loadInfo();
     }
 
     @SuppressLint("CheckResult")
-    public void loadInfo()
-    {
+    public void loadInfo() {
         getViewState().showLoading();
         userRepo.getUser("googlesamples")
                 .observeOn(scheduler)
@@ -81,8 +77,7 @@ public class MainPresenter extends MvpPresenter<MainView>
     }
 
 
-    public RepoListPresenter getRepoListPresenter()
-    {
+    public RepoListPresenter getRepoListPresenter() {
         return repoListPresenter;
     }
 }

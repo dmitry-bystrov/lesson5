@@ -13,9 +13,12 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import ru.geekbrains.android3_5.App;
 import ru.geekbrains.android3_5.R;
 import ru.geekbrains.android3_5.mvp.model.image.ImageLoader;
 import ru.geekbrains.android3_5.mvp.model.image.android.ImageLoaderGlide;
@@ -36,7 +39,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
     @InjectPresenter
     MainPresenter presenter;
 
-    ImageLoader<ImageView> imageLoader;
+    @Inject ImageLoader<ImageView> imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,8 +47,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        imageLoader = new ImageLoaderGlide();
+        App.getInstance().getAppComponent().inject(MainActivity.this);
 
         reposRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reposRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -61,7 +63,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
     @ProvidePresenter
     public MainPresenter provideMainPresenter()
     {
-        return new MainPresenter(AndroidSchedulers.mainThread());
+        MainPresenter presenter = new MainPresenter(AndroidSchedulers.mainThread());
+        App.getInstance().getAppComponent().inject(presenter);
+        return presenter;
     }
 
 

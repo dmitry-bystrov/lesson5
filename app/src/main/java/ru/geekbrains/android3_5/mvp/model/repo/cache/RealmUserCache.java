@@ -1,4 +1,4 @@
-package ru.geekbrains.android3_5.mvp.model.repo;
+package ru.geekbrains.android3_5.mvp.model.repo.cache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,6 @@ public class RealmUserCache implements UserCache {
     @Override
     public void saveUser(String username, User user) {
         Realm realm = Realm.getDefaultInstance();
-//        realm.executeTransaction(innerRealm -> {
-//            innerRealm.deleteAll();
-//        });
 
         RealmUser realmUser = realm.where(RealmUser.class).equalTo("login", username).findFirst();
         if (realmUser == null) {
